@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
-  
+
   # if spec.respond_to?(:metadata)
   #   spec.metadata['allowed_push_host'] = 'http://mygemserver.com'
   # else
@@ -34,5 +34,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+
+  spec.add_runtime_dependency "faraday", "~> 0.11.0"
+  spec.add_runtime_dependency "zipkin-tracer", "~> 0.20.1"
 
 end

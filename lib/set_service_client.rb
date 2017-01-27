@@ -1,4 +1,6 @@
 require_relative "set_service_client/version"
+require "faraday"
+require "zipkin-tracer"
 
 module SetServiceClient
 	def self.post(submission_id)
@@ -23,7 +25,7 @@ module SetServiceClient
 
 	def self.get_connection
 		conn = Faraday.new(:url => Rails.application.config.set_url) do |faraday|
-			# faraday.use ZipkinTracer::FaradayHandler, 'Set Service'
+			faraday.use ZipkinTracer::FaradayHandler, 'Set Service'
 			faraday.proxy Rails.application.config.set_url_default_proxy
 			faraday.request  :url_encoded
 			faraday.response :logger
