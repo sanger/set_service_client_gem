@@ -18,7 +18,13 @@ module SetServiceClient
 	def self.get_with_materials(set_uuid)
 		conn = get_connection
 		conn.headers = {'Accept' => 'application/vnd.api+json'}
-		JSON.parse(get_connection.get('/api/v1/sets/'+set_uuid+'/relationships/materials').body)
+		JSON.parse(conn.get('/api/v1/sets/'+set_uuid+'/relationships/materials').body)
+	end
+
+	def self.get_set(set_uuid)
+		conn = get_connection
+		conn.headers = {'Accept' => 'application/vnd.api+json'}
+		JSON.parse(conn.get('/api/v1/sets/'+set_uuid).body)
 	end
 
 	private
@@ -30,7 +36,6 @@ module SetServiceClient
 			faraday.request  :url_encoded
 			faraday.response :logger
 			faraday.adapter  Faraday.default_adapter
-			faraday.proxy Rails.application.config.set_url_default_proxy
 		end
 		conn.headers = {'Content-Type' => 'application/vnd.api+json'}
 		conn
