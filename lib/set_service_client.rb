@@ -20,7 +20,7 @@ module SetServiceClient
 		data = {data: {type: "sets", id: set_uuid, attributes: {locked: true}}}
 		conn = get_connection
 		conn.headers['Accept'] = 'application/vnd.api+json'
-		conn.patch('/api/v1/sets/'+set_uuid, data.to_json)
+		JSON.parse(conn.patch('/api/v1/sets/'+set_uuid, data.to_json).body)
 	end
 
 	def self.add_materials(set_uuid, materials)
