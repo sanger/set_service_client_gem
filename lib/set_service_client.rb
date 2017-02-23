@@ -41,6 +41,12 @@ module SetServiceClient
 		JSON.parse(conn.get('/api/v1/sets/'+set_uuid).body)
 	end
 
+	def self.get_all
+		conn = get_connection
+		conn.headers = {'Accept' => 'application/vnd.api+json'}
+		JSON.parse(conn.get('/api/v1/sets').body)
+	end
+
 private
 
 	def self.get_connection
