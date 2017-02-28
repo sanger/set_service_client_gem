@@ -3,10 +3,24 @@ require "faraday"
 require "zipkin-tracer"
 
 module SetServiceClient
-	def self.post(submission_id)
-		data = {:data=>{:type=>"sets", :attributes=>{:name=>submission_id}}}
+	def self.post(name)
+		data = {:data=>{:type=>"sets", :attributes=>{:name=>name}}}
 		conn = get_connection
 		JSON.parse(conn.post('/api/v1/sets', data.to_json).body)
+	end
+
+	def self.clone_set(set_uuid, new_name)
+		data = {data: {attributes: {name: new_name}}}
+		conn = get_connection
+		conn.headers['Accept'] = 'application/vnd.api+json'
+		JSON.parse(conn.post('/api/v1/sets/'+set_uuid+'/clone', data.to_json).body)
+	end
+
+	def self.lock_set(set_uuid)
+		data = {data: {type: "sets", id: set_uuid, attributes: {locked: true}}}
+		conn = get_connection
+		conn.headers['Accept'] = 'application/vnd.api+json'
+		JSON.parse(conn.patch('/api/v1/sets/'+set_uuid, data.to_json).body)
 	end
 
 	def self.add_materials(set_uuid, materials)
@@ -27,7 +41,13 @@ module SetServiceClient
 		JSON.parse(conn.get('/api/v1/sets/'+set_uuid).body)
 	end
 
-	private
+	def self.get_all
+		conn = get_connection
+		conn.headers = {'Accept' => 'application/vnd.api+json'}
+		JSON.parse(conn.get('/api/v1/sets').body)
+	end
+
+private
 
 	def self.get_connection
 		conn = Faraday.new(:url => Rails.application.config.set_url) do |faraday|
